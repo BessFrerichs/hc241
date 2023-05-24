@@ -38,3 +38,22 @@ def naive_bayes(table, evidence_row, target):
   
   #return your 2 results in a list
   return [neg, pos]
+
+def metrics(zipped_list):
+  assert type(zipped_list) == list, f"Parameter should be a list, but instead is {type(zipped_list)}"
+  assert all(type(x) == list for x in zipped_list), f"Parameter is not a list of lists"
+  assert all(len(x) == 2 for x in zipped_list), f"Parameter is not a zipped list of pairs"
+  assert all(isinstance(item, int) for mini_list in zipped_list for item in mini_list), f"Items inside of nested lists are not integers"
+  assert all(item >= 0 for mini_list in zipped_list for item in mini_list), f"Items inside of nested lists should be positive but are negative"
+
+  accuracy = sum(pred==act for pred,act in zipped_list)/len(zipped_list)
+  tn = sum([1 if pair==[0,0] else 0 for pair in zipped_list])
+  tp = sum([1 if pair==[1,1] else 0 for pair in zipped_list])
+  fp = sum([1 if pair==[1,0] else 0 for pair in zipped_list])
+  fn = sum([1 if pair==[0,1] else 0 for pair in zipped_list])
+  precision = 0 if (tp + fp == 0) else tp/(tp + fp)
+  recall = 0 if (tp + fn == 0) else tp/(tp + fn)
+  f1 = 0 if (precision + recall == 0) else (2*precision*recall)/(precision + recall)
+  mets_dict = {'Precision': f'{precision}', 'Recall': f'{recall}', 'F1': f'{f1}', 'Accuracy': f'{accuracy}'}
+
+  return mets_dict
