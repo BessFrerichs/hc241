@@ -57,3 +57,19 @@ def metrics(zipped_list):
   mets_dict = {'Precision': f'{precision}', 'Recall': f'{recall}', 'F1': f'{f1}', 'Accuracy': f'{accuracy}'}
 
   return mets_dict
+
+for arch in all_architectures:
+  all_results = up_neural_net(train_table, test_table, arch, 'adopted')
+  #loop through thresholds
+  all_mets = []
+  for t in thresholds:
+    all_predictions = [1 if pos>=t else 0 for neg,pos in all_results]
+    pred_act_list = up_zip_lists(all_predictions, up_get_column(test_table, target))
+    mets = metrics(pred_act_list)
+    mets['Threshold'] = t
+    all_mets = all_mets + [mets]
+  
+  print(f'Architecture: {arch}')
+  print(up_metrics_table(all_mets))
+
+
