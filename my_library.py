@@ -43,7 +43,7 @@ def metrics(zipped_list):
   assert type(zipped_list) == list, f"Parameter should be a list, but instead is {type(zipped_list)}"
   assert all(type(x) == list for x in zipped_list), f"Parameter is not a list of lists"
   assert all(len(x) == 2 for x in zipped_list), f"Parameter is not a zipped list of pairs"
-  #assert all(isinstance(item, int) for mini_list in zipped_list for item in mini_list), f"Items inside of nested lists are not integers"
+  assert all(isinstance(item, float) for mini_list in zipped_list for item in mini_list), f"Items inside of nested lists are not integers"
   assert all(item >= 0 for mini_list in zipped_list for item in mini_list), f"Items inside of nested lists should be positive but are negative"
 
   accuracy = sum(pred==act for pred,act in zipped_list)/len(zipped_list)
